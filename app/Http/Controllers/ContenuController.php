@@ -9,8 +9,18 @@ class ContenuController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(){
-        return 'Liste des contenus multimédias';
+    public function index($tri = 'recent'){
+        $contenus = [
+            (object) [
+                'titre' => 'Court-métrage documentaire',
+                'description' => 'Un aperçu de la vie urbaine.'
+            ],
+            (object) [
+                'titre' => 'Podcast technologie',
+                'description' => 'Actualités du développement web.'
+            ],
+        ];
+        return view('contenus.index', ['contenus' => $contenus]);
     }
 
     /**
@@ -32,7 +42,8 @@ class ContenuController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id){
+    public function show(string $id)
+    {
         // dd($id);
         return 'Détail du contenu numéro ' . $id;
     }
