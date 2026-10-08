@@ -13,7 +13,10 @@ class Carte extends Component
      */
 
     
-    public function __construct(public string $titre)
+    public function __construct(
+        public string $titre,
+        public bool $enAvant = false
+        )
     {
         //
     }

@@ -1,20 +1,11 @@
-/* ========================================================================
-   PALETTE DE COULEURS (extraite de la nouvelle image)
-   ========================================================================
-   --couleur-primaire   : #f49340 (Orange doux / Mandarine)
-   --couleur-secondaire : #fbdcaf (Crème / Pêche clair)
-   --couleur-fond       : #373735 (Anthracite chaud / Gris très foncé)
-   --couleur-claire     : #cae8e1 (Menthe très claire / Gris-vert pâle)
-   ======================================================================== */
-
 :root {
     --couleur-primaire: #f49340;
     --couleur-secondaire: #fbdcaf;
     --couleur-fond: #373735;
     --couleur-claire: #cae8e1;
-    --couleur-fond-carte: #ffffff; /* Fond blanc pour les cartes sur fond clair */
-    --couleur-texte: #373735; /* Texte foncé sur fond clair */
-    --couleur-texte-attenue: #6b6b6b; /* Texte gris pour les descriptions */
+    --couleur-fond-carte: #ffffff; 
+    --couleur-texte: #373735; 
+    --couleur-texte-attenue: #6b6b6b; 
 }
 
 /* ===== Reset & Base ===== */
@@ -28,7 +19,7 @@ body {
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     line-height: 1.6;
     color: var(--couleur-texte);
-    background-color: #fcfcfc; /* Fond général très clair pour faire ressortir les cartes */
+    background-color: #fcfcfc; 
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -108,6 +99,40 @@ h1 {
 
 .carte-corps p {
     color: var(--couleur-texte-attenue);
+}
+
+/* ===== Carte mise en avant ===== */
+.carte-mise-en-avant {
+    background: linear-gradient(135deg, var(--couleur-secondaire) 0%, #ffffff 100%);
+    border-left-width: 8px;
+    border-left-color: var(--couleur-primaire);
+    box-shadow: 0 8px 24px rgba(244, 147, 64, 0.25);
+    transform: scale(1.02);
+}
+
+.carte-mise-en-avant h2 {
+    color: var(--couleur-primaire);
+}
+
+.badge-vedette {
+    display: inline-block;
+    background-color: var(--couleur-primaire);
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive : on annule l'effet de zoom sur mobile */
+@media (max-width: 600px) {
+    .carte-mise-en-avant {
+        transform: none;
+    }
 }
 
 /* ===== Pied de page ===== */
