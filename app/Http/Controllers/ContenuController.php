@@ -3,24 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Publication;
 
 class ContenuController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index($tri = 'recent'){
-        $contenus = [
-            (object) [
-                'titre' => 'Court-métrage documentaire',
-                'description' => 'Un aperçu de la vie urbaine.'
-            ],
-            (object) [
-                'titre' => 'Podcast technologie',
-                'description' => 'Actualités du développement web.'
-            ],
-        ];
-        return view('contenus.index', ['contenus' => $contenus]);
+    public function index($tri = 'recent')
+    {
+        $publications = Publication::latest()->paginate(9); //with(['categorie', 'auteur'])
+        return view('contenus.index', ['publications' => $publications]);
     }
 
     /**
@@ -42,10 +35,10 @@ class ContenuController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Publication $publication)
     {
-        // dd($id);
-        return 'Détail du contenu numéro ' . $id;
+        $publication->load(['categorie', 'auteur', 'commentaires.auteur']);
+        return view('contenus.show', ['publication' => $publication]);
     }
 
     /**

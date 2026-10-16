@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Commentaire;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Publication extends Model
 {
      use HasFactory;
+     use SoftDeletes;
 
     protected $fillable = [
         'titre',
@@ -22,7 +24,7 @@ class Publication extends Model
         return $this->belongsTo(Categorie::class, 'categorie_id');
     }
 
-    public function utilisateur()
+    public function auteur()
     {
         return $this->belongsTo(User::class, 'utilisateur_id');
     }

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('publications', function (Blueprint $table) {
             $table->id();
-            $table->string('titre');
+            $table->string('titre')->unique();
             $table->text('contenu');
             $table->foreignId('categorie_id')->constrained('categories')->casecadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->casecadeOnDelete();
