@@ -13,6 +13,11 @@
     @include('partials.navigation')
 
     <main class="conteneur">
+        
+        @if (session('succes'))
+            <div class="alerte alerte-succes">{{ session('succes') }}</div>
+        @endif
+
         @yield('contenu')
     </main>
     
