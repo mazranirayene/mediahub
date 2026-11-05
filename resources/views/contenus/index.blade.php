@@ -3,28 +3,37 @@
 @section('titre', 'Contenus')
 
 @section('contenu')
-    <h1>Contenus multimédias</h1>
+    <div class="contenus-entete">
+        <h1>Contenus multimédias</h1>
+        <a class="categories-bouton categories-bouton-principal" href="{{ route('contenus.create') }}">
+            + Ajouter un contenu
+        </a>
+    </div>
 
-    @forelse ($publications as $publication)
-        <x-carte titre="{{ $publication->titre }}">
-            <p>Catégorie : {{ $publication->categorie->nom }} —
-                Par {{ $publication->auteur }} —
-                {{ $publication->created_at->format('d/m/Y') }}
-            </p>
+    <div class="contenus-grille">
+        @forelse ($publications as $publication)
+            <x-carte titre="{{ $publication->titre }}">
+                <p class="contenu-meta">
+                    Catégorie : {{ $publication->categorie->nom }} —
+                    Par {{ $publication->auteur }} —
+                    {{ $publication->created_at->format('d/m/Y') }}
+                </p>
 
-            {{-- Liens d'action --}}
-            <a href="{{ route('contenus.edit', $publication) }}">Modifier</a>
+                <div class="contenus-actions">
+                    <a href="{{ route('contenus.edit', $publication) }}">Modifier</a>
 
-            <form method="POST" action="{{ route('contenus.destroy', $publication) }}" style="display: inline;"
-                onsubmit="return confirm('Supprimer la publication « {{ $publication->titre }} » ?');">
-                @csrf
-                @method('DELETE')
-                <button type="submit">Supprimer</button>
-            </form>
-        </x-carte>
-    @empty
-        <p>Aucun contenu disponible pour le moment.</p>
-    @endforelse
+                    <form method="POST" action="{{ route('contenus.destroy', $publication) }}"
+                        onsubmit="return confirm('Supprimer la publication « {{ $publication->titre }} » ?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit">Supprimer</button>
+                    </form>
+                </div>
+            </x-carte>
+        @empty
+            <p class="contenus-vide">Aucun contenu disponible pour le moment.</p>
+        @endforelse
+    </div>
 
     {{-- Pagination --}}
     <div class="pagination">

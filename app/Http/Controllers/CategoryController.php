@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreCategorieRequest;
+use App\Http\Requests\UpdateCategorieRequest;
 use App\Models\Categorie;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Categorie::withCount('publications')->get();
+        $categories = Categorie::withCount('publications')->paginate(5);
+
         return view('categories.index', compact('categories'));
     }
 
@@ -18,9 +20,10 @@ class CategoryController extends Controller
         return view('categories.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreCategorieRequest $request)
     {
-        $categorie = Categorie::create($request->only('nom', 'slug'));
+        $categorie = Categorie::create($request->validated());
+
         return redirect()->route('categories.index')->with('succes', 'Catégorie créée avec succès.');
     }
 
@@ -29,9 +32,10 @@ class CategoryController extends Controller
         return view('categories.edit', compact('categorie'));
     }
 
-    public function update(Request $request, Categorie $categorie)
+    public function update(UpdateCategorieRequest $request, Categorie $categorie)
     {
-        $categorie->update($request->only('nom', 'slug'));
+        $categorie->update($request->validated());
+
         return redirect()
             ->route('categories.index')
             ->with('succes', 'Catégorie mise à jour avec succès.');
@@ -39,6 +43,14 @@ class CategoryController extends Controller
 
     public function destroy(Categorie $categorie)
     {
+        if ($categorie->publications()->count() > 0) {
+            $nombre = $categorie->publications()->count();
+
+            return redirect()
+                ->route('categories.index')
+                ->with('erreur', "Impossible de supprimer la catégorie « {$categorie->nom} » : elle est associée à {$nombre} publication(s).");
+        }
+
         $categorie->delete();
 
         return redirect()

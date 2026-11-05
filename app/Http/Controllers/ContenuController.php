@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Publication;
+use App\Http\Requests\StorePublicationRequest;
+use App\Http\Requests\UpdatePublicationRequest;
 use App\Models\Categorie;
-
+use App\Models\Publication;
 
 class ContenuController extends Controller
 {
@@ -17,6 +17,7 @@ class ContenuController extends Controller
         $publications = Publication::with(['categorie', 'auteur'])
             ->latest()
             ->paginate(9);
+
         return view('contenus.index', compact('publications'));
     }
 
@@ -25,20 +26,21 @@ class ContenuController extends Controller
      */
     public function create()
     {
-        $categories  = Categorie::all();
+        $categories = Categorie::all();
+
         return view('contenus.create', compact('categories'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePublicationRequest $request)
     {
         $publication = Publication::create([
-            'titre' => $request->input('titre'),
-            'contenu' => $request->input('contenu'),
-            'categorie_id' => $request->input('categorie_id'),
-            'user_id' => 1
+            'titre' => $request->validated('titre'),
+            'contenu' => $request->validated('contenu'),
+            'categorie_id' => $request->validated('categorie_id'),
+            'user_id' => 1,
         ]);
 
         return redirect()
@@ -52,6 +54,7 @@ class ContenuController extends Controller
     public function show(Publication $publication)
     {
         $publication->load(['categorie', 'auteur', 'commentaires.auteur']);
+
         return view('contenus.show', ['publication' => $publication]);
     }
 
@@ -61,15 +64,17 @@ class ContenuController extends Controller
     public function edit(Publication $publication)
     {
         $categories = Categorie::all();
+
         return view('contenus.edit', compact('publication', 'categories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Publication $publication)
+    public function update(UpdatePublicationRequest $request, Publication $publication)
     {
-        $publication->update($request->only('titre', 'contenu', 'categorie_id'));
+        $publication->update($request->validated());
+
         return redirect()
             ->route('contenus.index', $publication)
             ->with('succes', 'Publication mise à jour avec succès.');
@@ -81,6 +86,7 @@ class ContenuController extends Controller
     public function destroy(Publication $publication)
     {
         $publication->delete();
+
         return redirect()
             ->route('contenus.index')
             ->with('succes', 'Publication supprimée avec succès.');

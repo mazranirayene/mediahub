@@ -1,39 +1,45 @@
-<!DOCTYPE html>
-<html lang="fr">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <title>Modifier une catégorie</title>
-</head>
+@section('titre', 'Modifier une catégorie')
 
-<body>
-    <h1>Modifier la catégorie #{{ $categorie->id }}</h1>
+@section('contenu')
+    <div class="categories-formulaire-page">
+        <header class="categories-formulaire-entete">
+            <h1>Modifier une catégorie</h1>
+            <p>Mettez à jour le nom ou le slug de « {{ $categorie->nom }} ».</p>
+        </header>
 
+        <form class="categorie-formulaire" method="POST" action="{{ route('categories.update', $categorie) }}">
+            @csrf
+            @method('PUT')
 
-    <form method="POST" action="{{ route('categories.update', $categorie) }}">
-        @csrf
-        @method('PUT')
+            <div class="categorie-champ">
+                <label for="nom">Nom</label>
+                <input type="text" name="nom" id="nom" value="{{ old('nom', $categorie->nom) }}"
+                    @if ($errors->has('nom')) aria-invalid="true" aria-describedby="nom-error" @endif>
+                @error('nom')
+                    <span class="categorie-erreur" id="nom-error" role="alert">{{ $message }}</span>
+                @enderror
+            </div>
 
-        <div>
-            <label for="nom">Nom</label>
-            <input type="text" name="nom" id="nom" value="{{ old('nom', $categorie->nom) }}">
-            @error('nom')
-                <span style="color: red;">{{ $message }}</span>
-            @enderror
-        </div>
+            <div class="categorie-champ">
+                <label for="slug">Slug</label>
+                <input type="text" name="slug" id="slug" value="{{ old('slug', $categorie->slug) }}"
+                    @if ($errors->has('slug')) aria-invalid="true" aria-describedby="slug-error" @endif>
+                @error('slug')
+                    <span class="categorie-erreur" id="slug-error" role="alert">{{ $message }}</span>
+                @enderror
+            </div>
 
-        <div>
-            <label for="slug">Slug</label>
-            <input type="text" name="slug" id="slug" value="{{ old('slug', $categorie->slug) }}">
-            @error('slug')
-                <span style="color: red;">{{ $message }}</span>
-            @enderror
-        </div>
-
-        <button type="submit">Upload</button>
-    </form>
-
-    <p><a href="{{ route('categories.index') }}">← Retour à la liste</a></p>
-</body>
-
-</html>
+            <div class="categorie-formulaire-actions">
+                <button class="categories-bouton categories-bouton-principal" type="submit">
+                    Enregistrer les modifications
+                </button>
+                <a class="categories-bouton categories-bouton-secondaire"
+                    href="{{ route('categories.index') }}">
+                    Annuler
+                </a>
+            </div>
+        </form>
+    </div>
+@endsection
