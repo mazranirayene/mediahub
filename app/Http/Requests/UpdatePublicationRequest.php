@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Publication;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -12,7 +13,10 @@ class UpdatePublicationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $publication = $this->route('publication');
+
+        return $publication instanceof Publication
+            && ($this->user()?->can('update', $publication) ?? false);
     }
 
     /**

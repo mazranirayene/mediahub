@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Publication;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -12,7 +13,7 @@ class StorePublicationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()?->can('create', Publication::class) ?? false;
     }
 
     /**
@@ -23,9 +24,16 @@ class StorePublicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'titre' => 'required|string|max:255',
+            'titre' => 'required|string|min:10|max:255|unique:publications,titre',
             'contenu' => 'required|string|min:20',
             'categorie_id' => 'required|exists:categories,id',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'titre.min' => 'Le titre doit contenir au moins 10 caractères.',
         ];
     }
 }

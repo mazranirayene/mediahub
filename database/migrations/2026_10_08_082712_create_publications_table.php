@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('titre')->unique();
             $table->text('contenu');
-            $table->foreignId('categorie_id')->constrained('categories')->casecadeOnDelete();
-            $table->foreignId('user_id')->constrained('users')->casecadeOnDelete();
+            $table->foreignId('categorie_id')->constrained('categories')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }

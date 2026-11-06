@@ -15,7 +15,7 @@
             <x-carte titre="{{ $publication->titre }}">
                 <p class="contenu-meta">
                     Catégorie : {{ $publication->categorie->nom }} —
-                    Par {{ $publication->auteur }} —
+                    Par {{ $publication->auteur->name }} —
                     {{ $publication->created_at->format('d/m/Y') }}
                 </p>
 

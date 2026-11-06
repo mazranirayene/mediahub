@@ -4,19 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Commentaire;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Publication extends Model
 {
-     use HasFactory;
-     use SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'titre',
         'contenu',
         'categorie_id',
-        'utilisateur_id',
+        'user_id',
     ];
 
     public function categorie()
@@ -26,7 +25,7 @@ class Publication extends Model
 
     public function auteur()
     {
-        return $this->belongsTo(User::class, 'utilisateur_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function commentaires()

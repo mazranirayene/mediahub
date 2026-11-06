@@ -40,11 +40,11 @@ class ContenuController extends Controller
             'titre' => $request->validated('titre'),
             'contenu' => $request->validated('contenu'),
             'categorie_id' => $request->validated('categorie_id'),
-            'user_id' => 1,
+            'user_id' => auth()->id(),
         ]);
 
         return redirect()
-            ->route('contenus.index', $publication)
+            ->route('contenus.index')
             ->with('succes', 'Publication créée avec succès.');
     }
 
@@ -63,6 +63,8 @@ class ContenuController extends Controller
      */
     public function edit(Publication $publication)
     {
+        $this->authorize('update', $publication);
+
         $categories = Categorie::all();
 
         return view('contenus.edit', compact('publication', 'categories'));
@@ -76,7 +78,7 @@ class ContenuController extends Controller
         $publication->update($request->validated());
 
         return redirect()
-            ->route('contenus.index', $publication)
+            ->route('contenus.index')
             ->with('succes', 'Publication mise à jour avec succès.');
     }
 
@@ -85,6 +87,8 @@ class ContenuController extends Controller
      */
     public function destroy(Publication $publication)
     {
+        $this->authorize('delete', $publication);
+
         $publication->delete();
 
         return redirect()
