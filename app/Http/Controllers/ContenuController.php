@@ -6,6 +6,7 @@ use App\Http\Requests\StorePublicationRequest;
 use App\Http\Requests\UpdatePublicationRequest;
 use App\Models\Categorie;
 use App\Models\Publication;
+use Illuminate\Support\Facades\Storage;
 
 class ContenuController extends Controller
 {
@@ -36,15 +37,23 @@ class ContenuController extends Controller
      */
     public function store(StorePublicationRequest $request)
     {
-        $publication = Publication::create([
-            'titre' => $request->validated('titre'),
-            'contenu' => $request->validated('contenu'),
-            'categorie_id' => $request->validated('categorie_id'),
-            'user_id' => auth()->id(),
-        ]);
+        $donnees = $request->validated();
+        if ($request->hasFile('image')) {
+            $donnees['image'] = $request
+                ->file('image')->store('publications', 'public');
+        }
+        if ($request->hasFile('fichier_media')) {
+            $fichier = $request->file('fichier_media');
+            $donnees['fichier_media'] = $fichier->store('medias', 'public');
+            $donnees['type_media'] = str_starts_with(
+                $fichier->getMimeType(),
+                'audio'
+            ) ? 'audio' : 'video';
+        }
+        $donnees['user_id'] = auth()->id();
+        Publication::create($donnees);
 
-        return redirect()
-            ->route('contenus.index')
+        return redirect()->route('contenus.index')
             ->with('succes', 'Publication créée avec succès.');
     }
 
@@ -75,10 +84,18 @@ class ContenuController extends Controller
      */
     public function update(UpdatePublicationRequest $request, Publication $publication)
     {
-        $publication->update($request->validated());
+        $this->authorize('update', $publication);
+        $donnees = $request->validated();
+        if ($request->hasFile('image')) {
+            if ($publication->image) {
+                Storage::disk('public')->delete($publication->image);
+            }
+            $donnees['image'] = $request
+                ->file('image')->store('publications', 'public');
+        }
+        $publication->update($donnees);
 
-        return redirect()
-            ->route('contenus.index')
+        return redirect()->route('contenus.show', $publication)
             ->with('succes', 'Publication mise à jour avec succès.');
     }
 

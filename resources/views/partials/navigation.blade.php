@@ -12,9 +12,9 @@
         <a href="{{ route('inscription') }}">Inscription</a>
     @endguest
     @auth
-        <form method="POST" action="{{ route('deconnexion') }}">
+        <form class="navigation-deconnexion" method="POST" action="{{ route('deconnexion') }}">
             @csrf
-            <button type="submit">Déconnexion</button>
+            <button class="navigation-bouton-deconnexion" type="submit">Déconnexion</button>
         </form>
     @endauth
 </nav>

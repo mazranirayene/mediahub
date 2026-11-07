@@ -8,9 +8,11 @@
             <h1>Catégories</h1>
             <p>Organisez vos publications en un seul endroit.</p>
         </div>
-        <a class="categories-bouton categories-bouton-principal" href="{{ route('categories.create') }}">
-            + Créer une catégorie
-        </a>
+        @can('gerer-categories')
+            <a class="categories-bouton categories-bouton-principal" href="{{ route('categories.create') }}">
+                + Créer une catégorie
+            </a>
+        @endcan
     </div>
 
     @if ($categories->isEmpty())
@@ -25,19 +27,19 @@
                     </div>
 
                     <div class="categorie-actions">
-                        <a class="categories-bouton categories-bouton-secondaire"
-                            href="{{ route('categories.edit', $categorie) }}">
-                            Modifier
-                        </a>
-
-                        <form method="POST" action="{{ route('categories.destroy', $categorie) }}"
-                            onsubmit="return confirm('Supprimer la catégorie « {{ $categorie->nom }} » ?');">
-                            @csrf
-                            @method('DELETE')
-                            <button class="categories-bouton categories-bouton-danger" type="submit">
-                                Supprimer
-                            </button>
-                        </form>
+                        @can('gerer-categories')
+                            <a class="categories-bouton categories-bouton-secondaire" href="{{ route('categories.edit', $categorie) }}">
+                                Modifier
+                            </a>
+                            <form method="POST" action="{{ route('categories.destroy', $categorie) }}"
+                                onsubmit="return confirm('Supprimer la catégorie « {{ $categorie->nom }} » ?');">
+                                @csrf
+                                @method('DELETE')
+                                <button class="categories-bouton categories-bouton-danger" type="submit">
+                                    Supprimer
+                                </button>
+                            </form>
+                        @endcan
                     </div>
                 </li>
             @endforeach

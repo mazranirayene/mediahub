@@ -12,7 +12,7 @@
 
     <div class="contenus-grille">
         @forelse ($publications as $publication)
-            <x-carte titre="{{ $publication->titre }}">
+            <x-carte titre="{{ $publication->titre }}" :publication="$publication">
                 <p class="contenu-meta">
                     Catégorie : {{ $publication->categorie->nom }} —
                     Par {{ $publication->auteur->name }} —

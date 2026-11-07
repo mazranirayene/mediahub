@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Publication extends Model
 {
@@ -16,6 +17,9 @@ class Publication extends Model
         'contenu',
         'categorie_id',
         'user_id',
+        'image',
+        'fichier_media',
+        'type_media',
     ];
 
     public function categorie()
@@ -31,5 +35,17 @@ class Publication extends Model
     public function commentaires()
     {
         return $this->hasMany(Commentaire::class, 'publication_id');
+    }
+
+    protected static function booted(): void
+    {
+        static::deleting(function (Publication $p) {
+            if ($p->image) {
+                Storage::disk('public')->delete($p->image);
+            }
+            if ($p->fichier_media) {
+                Storage::disk('public')->delete($p->fichier_media);
+            }
+        });
     }
 }

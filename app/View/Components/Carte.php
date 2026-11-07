@@ -2,6 +2,7 @@
 
 namespace App\View\Components;
 
+use App\Models\Publication;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
@@ -11,13 +12,11 @@ class Carte extends Component
     /**
      * Create a new component instance.
      */
-
-    
     public function __construct(
         public string $titre,
-        public bool $enAvant = false
-        )
-    {
+        public bool $enAvant = false,
+        public ?Publication $publication = null,
+    ) {
         //
     }
 

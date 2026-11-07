@@ -17,11 +17,14 @@ class CategoryController extends Controller
 
     public function create()
     {
+        $this->authorize('gerer-categories');
+
         return view('categories.create');
     }
 
     public function store(StoreCategorieRequest $request)
     {
+        $this->authorize('gerer-categories');
         $categorie = Categorie::create($request->validated());
 
         return redirect()->route('categories.index')->with('succes', 'Catégorie créée avec succès.');
@@ -43,6 +46,7 @@ class CategoryController extends Controller
 
     public function destroy(Categorie $categorie)
     {
+        $this->authorize('gerer-categories');
         if ($categorie->publications()->count() > 0) {
             $nombre = $categorie->publications()->count();
 
