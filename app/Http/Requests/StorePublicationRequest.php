@@ -36,6 +36,9 @@ class StorePublicationRequest extends FormRequest
     {
         return [
             'titre.min' => 'Le titre doit contenir au moins 10 caractères.',
+            'fichier_media.file' => 'Un seul fichier média est autorisé par publication.',
+            'fichier_media.mimes' => 'Le média doit être au format mp3, mp4 ou wav.',
+            'fichier_media.max' => 'Le média ne doit pas dépasser 20 Mo.',
         ];
     }
 }

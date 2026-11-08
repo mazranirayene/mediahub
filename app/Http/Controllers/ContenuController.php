@@ -38,6 +38,7 @@ class ContenuController extends Controller
     public function store(StorePublicationRequest $request)
     {
         $donnees = $request->validated();
+        
         if ($request->hasFile('image')) {
             $donnees['image'] = $request
                 ->file('image')->store('publications', 'public');
