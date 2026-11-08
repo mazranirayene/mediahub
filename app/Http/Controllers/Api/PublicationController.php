@@ -14,10 +14,16 @@ class PublicationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $publications = Publication::with('categorie', 'auteur')
-            ->latest()->paginate(10);
+        $publications = Publication::with(['categorie', 'auteur'])
+            ->when($request->filled('categorie_id'), function ($query) use ($request) {
+                $query->where('categorie_id', $request->integer('categorie_id'));
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();  
+
         return PublicationResource::collection($publications);
     }
 

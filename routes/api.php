@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PublicationController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CategorieController;
 
 
 Route::get('/user', function (Request $request) {
@@ -19,3 +20,5 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::post('/connexion', [AuthController::class, 'connecter']);
+
+Route::get('/categories', [CategorieController::class, 'index']);

@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCategorieRequest;
 use App\Http\Requests\UpdateCategorieRequest;
 use App\Models\Categorie;
+use Illuminate\Support\Facades\Cache;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Categorie::withCount('publications')->paginate(5);
-
+        $categories = Cache::remember('categories.liste', 3600, function () {
+            return Categorie::withCount('publications')->get();
+        });
         return view('categories.index', compact('categories'));
     }
 
@@ -24,10 +26,9 @@ class CategoryController extends Controller
 
     public function store(StoreCategorieRequest $request)
     {
-        $this->authorize('gerer-categories');
-        $categorie = Categorie::create($request->validated());
-
-        return redirect()->route('categories.index')->with('succes', 'Catégorie créée avec succès.');
+        Categorie::create($request->validated());
+        Cache::forget('categories.liste');
+        return redirect()->route('categories.index');
     }
 
     public function edit(Categorie $categorie)
